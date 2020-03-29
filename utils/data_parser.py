@@ -46,7 +46,7 @@ def get_county_geo(df_geo: pd.DataFrame, df_cvd19: pd.DataFrame):
             index = county_info.index[populations == populations.max()][0]
             node = county_info.loc[index]
             data['latitude'].append(node.latitude)
-            data['longitude'].append(node.latitude)
+            data['longitude'].append(node.longitude)
         else:
             logging.warning(f"Problem with {v}, {k}\nAppending to null island")
             data['latitude'].append(0)

@@ -17,14 +17,15 @@ def load_data():
 
 def process_data():
     df_geo_info, df_covid19 = load_data()
-    geo_inf = get_county_geo(df_geo_info, df_covid19)
-    return geo_inf, df_covid19
+    geo_inf, nulls = get_county_geo(df_geo_info, df_covid19)
+    df_geo = pd.DataFrame(geo_inf)
+    return df_geo, df_covid19
 
-def main_pipeline():
-    geo_info, df_covid19 = process_data()
-    df_geo = pd.DataFrame(geo_info)
+def data_pipeline():
+    df_geo, df_covid19 = process_data()
     df = pd.concat([df_covid19, df_geo], axis=1)
-    df.to_csv('output/usa_covid19.csv')
+    df = df.drop('fips', axis=1)
+    df.to_csv('output/usa_covid19.csv',index=False)
 
 if __name__ == "__main__":
-    main_pipeline()
+    data_pipeline()
