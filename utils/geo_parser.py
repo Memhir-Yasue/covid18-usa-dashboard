@@ -15,14 +15,57 @@ def not_empty(df_query_result: pd.DataFrame):
     return False
 
 
-def correct_nulls(county: str):
-    if county == "new york city":
-        return 'new york'
-    else:
-        return county
+def correct_nulls(county: str, state: str):
+    if state == 'AK':
+        if county == "anchorage":
+            return "municipality of anchorage"
+        elif county == "juneau city and borough":
+            return "juneau borough"
+    elif state == 'IL':
+        if county == 'lasalle':
+            return 'la salle'
+    elif state == 'IN':
+        if county == 'laporte':
+            return 'la porte'
+        elif county == 'dekalb':
+            return 'de kalb'
+    elif state == 'LA':
+        if 'parish' not in county:
+            return county + ' parish'
+    elif state == 'MA':
+        if county == "dukes and nantucket":
+            return 'nantucket'
+    elif state == 'MD':
+        if county == "prince george's":
+            return "prince georges"
+        elif county == "st mary's":
+            return "st. marys"
+        elif county == "queen anne's":
+            return "queen annes"
+    elif state == 'MO':
+        if county == "kansas city":
+            return 'jackson'
+        elif county == "st. francois":
+            return 'st francois'
+    elif state == "NM":
+        if county == "doña ana":
+            return 'dona ana'
+    elif state == 'NY':
+        if county == "new york city":
+            return 'new york'
+    elif state == 'TN':
+        if county == "dekalb":
+            return 'de kalb'
+    elif state == 'TX':
+        if county == "dewitt":
+            return 'de witt'
+    elif state == 'WI':
+        if county == "st. croix":
+            return "st croix"
+    return county
 
-def format(county: str):
-    county = correct_nulls(county)
+def format(county: str, state: str):
+    county = correct_nulls(county, state)
     county = county.replace("'", "")
     return county
 
@@ -38,7 +81,7 @@ def get_county_geo(df_geo: pd.DataFrame, df_cvd19: pd.DataFrame):
     data_null = {}
     for k, v in state_to_county:
         state = us_state_abbrev[k]
-        v = format(v)
+        v = format(v, state)
         county_info = (df_geo.query(f"state == '{state}' ")).query(f"county == '{v}' ")
         if not_empty(county_info):
             # select the city with the largest population as a geo-spatial node
