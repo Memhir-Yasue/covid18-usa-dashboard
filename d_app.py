@@ -3,7 +3,6 @@ import dash
 import pandas as pd
 import dash_core_components as dcc
 import dash_html_components as html
-import plotly.graph_objects as go
 import plotly.express as px
 
 
@@ -17,7 +16,7 @@ app.layout = html.Div(children=[
 
     html.Div(children='''
         Dashboard created using plotly dash for Python. 
-        Data from NY Times
+        Data from NY Times 
     '''),
 
     # dcc.Input(id='start-date', value='2020-03-26', type='text'),
@@ -54,11 +53,17 @@ def query_data(plot_by):
     date = df_usa['date'].max()
     df_tmp = df_usa.query(f" date == '{date}' ").drop_duplicates(subset=['latitude', 'longitude'])
     if plot_by == "1":
-        fig_map = px.scatter_geo(df_tmp, lat="latitude", lon="longitude", color="state", size_max=50,
-                                 hover_name="county", size="cases", template='plotly_dark', scope='usa')
+        fig_map = px.scatter_geo(df_usa, lat="latitude", lon="longitude", color="state",
+                       hover_name="county", size="cases", template='plotly_dark',
+                       animation_frame="date", scope="usa", size_max=60)
+        # fig_map = px.scatter_geo(df_tmp, lat="latitude", lon="longitude", color="state", size_max=80,
+        #                          hover_name="county", size="cases", template='plotly_dark', scope='usa')
     else:
-        fig_map = px.scatter_geo(df_tmp, lat="latitude", lon="longitude", color="state", size_max=50,
-                                 hover_name="county", size="deaths", template='plotly_dark', scope='usa')
+        fig_map = px.scatter_geo(df_usa, lat="latitude", lon="longitude", color="state",
+                                 hover_name="county", size="deaths", template='plotly_dark',
+                                 animation_frame="date", scope="usa", size_max=60)
+        # fig_map = px.scatter_geo(df_tmp, lat="latitude", lon="longitude", color="state", size_max=90,
+        #                          hover_name="county", size="deaths", template='plotly_dark', scope='usa')
     return fig_map
 
 
